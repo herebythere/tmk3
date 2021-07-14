@@ -1,0 +1,17 @@
+*.env
+*.txt
+*.crt
+*.key
+*.pem
+*.json
+*.conf
+*.rdb
+*.cf
+
+dockerfile
+docker-compose.yml
+
+**/db_store
+**/cache_store
+**/conf
+**/data
