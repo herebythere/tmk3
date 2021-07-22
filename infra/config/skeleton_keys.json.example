@@ -1,0 +1,9 @@
+{
+    "username": {
+        "password": "superpassword",
+        "services": [
+            "service_name",
+            "another_service_name"
+        ]
+    }
+}

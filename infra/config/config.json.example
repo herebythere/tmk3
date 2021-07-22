@@ -1,0 +1,30 @@
+{
+  "service_name": "infra",
+  "config": {
+    "filepath": "/usr/local/config/config.json",
+    "filepath_test": "/usr/local/config/config.json.example"
+  },
+  "skeleton_keys": {
+    "filepath": "/usr/local/config/skeleton_keys.json",
+    "filepath_test": "/usr/local/config/skeleton_keys.json.example"
+  },
+  "server": {
+    "https_port": 5000,
+    "idle_timeout": 5,
+    "read_timeout": 5,
+    "write_timeout": 10
+  },
+  "cert_paths": {
+    "cert": "/usr/local/config/fullchain.pem",
+    "private_key": "/usr/local/config/privkey.pem"
+  },
+  "cache": {
+    "host": "127.0.0.1",
+    "idle_timeout": 1,
+    "max_active": 1024,
+    "max_idle": 128,
+    "max_size_in_mb": "64mb",
+    "redis_port": 6379,
+    "protocol": "tcp"
+  }
+}
