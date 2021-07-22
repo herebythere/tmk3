@@ -1,5 +1,4 @@
 //	brian taylor vann
-//	briantaylorvann dot com
 
 package muxrouter
 
@@ -93,11 +92,4 @@ func CreateHTTPSMux(routes *map[string]string) (*ProxyMux, error) {
 	}
 
 	return &proxyMux, nil
-}
-
-func CreateRedirectMux() *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc(homeRoute, redirectToHTTPS)
-
-	return mux
 }

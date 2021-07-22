@@ -1,6 +1,3 @@
-//	brian taylor vann
-//	gateway
-
 package main
 
 import (
@@ -12,7 +9,6 @@ import (
 )
 
 var (
-	httpPort     = fmt.Sprint(":", details.Details.Server.HTTPPort)
 	httpsPort    = fmt.Sprint(":", details.Details.Server.HTTPSPort)
 	certFilepath = details.Details.CertPaths.Cert
 	keyFilepath  = details.Details.CertPaths.PrivateKey
@@ -24,16 +20,10 @@ func main() {
 		return
 	}
 
-	go http.ListenAndServeTLS(
+	http.ListenAndServeTLS(
 		httpsPort,
 		certFilepath,
 		keyFilepath,
 		proxyMux,
-	)
-
-	mux := muxrouter.CreateRedirectMux()
-	http.ListenAndServe(
-		httpPort,
-		mux,
 	)
 }
