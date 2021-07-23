@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"webapi/details"
@@ -20,10 +21,14 @@ func main() {
 		return
 	}
 
-	http.ListenAndServeTLS(
+	errServer := http.ListenAndServeTLS(
 		httpsPort,
 		certFilepath,
 		keyFilepath,
 		proxyMux,
 	)
+
+	if errServer != nil {
+		log.Println(errServer.Error())
+	}
 }

@@ -7,7 +7,9 @@ import (
 )
 
 const (
-	testHeaderBase64 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+	lazyFox = "i can be such a lazy summer fox sometimes"
+	lazyFoxJSON = `"i can be such a lazy summer fox sometimes"`
+	lazyFox64 = "ImkgY2FuIGJlIHN1Y2ggYSBsYXp5IHN1bW1lciBmb3ggc29tZXRpbWVzIg"
 )
 
 var (
@@ -19,21 +21,68 @@ var (
 	}
 )
 
-func TestConvertToBase64(t *testing.T) {
-	headerBase, errHeaderBase := convertToBase64(headerDefaultParams)
-	if errHeaderBase != nil {
+// nil checks, does it break?
+
+func TestEncodeToBase64(t *testing.T) {
+	encoded, errEncode := encodeToBase64(lazyFox)
+	if errEncode != nil {
 		t.Fail()
-		t.Logf(errHeaderBase.Error())
+		t.Logf(errEncode.Error())
 	}
 
-	if *headerBase != testHeaderBase64 {
+	if *encoded != lazyFox64 {
 		t.Fail()
-		t.Logf(fmt.Sprint("expected: ", testHeaderBase64, ", instead found: ", *headerBase))
+		t.Logf(fmt.Sprint("expected: ", lazyFox64, ", instead found: ", *encoded))
+	}
+}
+
+func TestEncodeToBase64WithNil(t *testing.T) {
+	encoded, errEncode := encodeToBase64(nil)
+	if errEncode == nil {
+		t.Fail()
+		t.Logf(fmt.Sprint("encodeToBase64 error should not be nil"))
+	}
+
+	if encoded != nil {
+		t.Fail()
+		t.Logf(fmt.Sprint("expected: ", nil, ", instead found: ", *encoded))
+	}
+}
+
+func TestDecodeToBase64(t *testing.T) {
+	encoded, errEncode := encodeToBase64(lazyFox)
+	if errEncode != nil {
+		t.Fail()
+		t.Logf(errEncode.Error())
+	}
+
+	decoded, errDecode := decodeFromBase64(encoded, nil)
+	if errDecode != nil {
+		t.Fail()
+		t.Logf(errDecode.Error())
+	}
+
+	if *decoded != lazyFoxJSON {
+		t.Fail()
+		t.Logf(fmt.Sprint("expected: ", lazyFox, ", instead found: ", *decoded))
+	}
+}
+
+func TestDecodeToBase64FromNil(t *testing.T) {
+	decoded, errDecode := decodeFromBase64(nil, nil)
+	if errDecode == nil {
+		t.Fail()
+		t.Logf(errDecode.Error())
+	}
+
+	if decoded != nil {
+		t.Fail()
+		t.Logf(fmt.Sprint("expected: ", nil, ", instead found: ", *decoded))
 	}
 }
 
 func TestGenerateRandomByteArray(t *testing.T) {
-	testLength := 12
+	testLength := 128
 
 	randomBytes, errRandomBytes := generateRandomByteArray(testLength, nil)
 	if errRandomBytes != nil {
@@ -113,6 +162,28 @@ func TestCreateJWTClaims(t *testing.T) {
 
 func TestCreateJWT(t *testing.T) {
 	tokenPayload, errTokenPayload := CreateJWT(&testClaims, nil)
+	if tokenPayload == nil {
+		t.Fail()
+		t.Logf("token should not be nil")
+	}
+
+	if errTokenPayload != nil {
+		t.Fail()
+		t.Logf(errTokenPayload.Error())
+	}
+}
+
+
+func TestCreateJWTFromSecret(t *testing.T) {
+	testLength := 128
+
+	randomBytes, errRandomBytes := generateRandomByteArray(testLength, nil)
+	if errRandomBytes != nil {
+		t.Fail()
+		t.Logf(errRandomBytes.Error())
+	}
+
+	tokenPayload, errTokenPayload := CreateJWTFromSecret(&testClaims, randomBytes, nil)
 	if tokenPayload == nil {
 		t.Fail()
 		t.Logf("token should not be nil")

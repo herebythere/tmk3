@@ -46,12 +46,13 @@ type TokenPayload struct {
 }
 
 type TokenDetails struct {
-	Header Header `json:"header"`
-	Claims Claims `json:"claims"`
+	Header *Header `json:"header"`
+	Claims *Claims `json:"claims"`
 }
 
 const (
 	periodRune = "."
+	randomLength = 128
 )
 
 var (
@@ -59,30 +60,36 @@ var (
 		Alg: "HS256",
 		Typ: "JWT",
 	}
-	headerBase64, errHeaderBase64 = convertToBase64(headerDefaultParams)
+	headerBase64, errHeaderBase64 = encodeToBase64(&headerDefaultParams)
 )
 
-func convertToBase64(h interface{}) (*string, error) {
-	marhalledHeader, err := json.Marshal(h)
-	if err != nil {
-		return nil, err
+func encodeToBase64(source interface{}) (*string, error) {
+	if source == nil {
+		return nil, errors.New("source is nil")
 	}
 
-	header64 := base64.RawStdEncoding.EncodeToString(marhalledHeader)
+	marshaled, errMarshaled := json.Marshal(source)
+	if errMarshaled != nil {
+		return nil, errMarshaled
+	}
 
-	return &header64, nil
+	marshaled64 := base64.RawStdEncoding.EncodeToString(marshaled)
+
+	return &marshaled64, nil
 }
 
-// untested
-func decodeFromBase64(str *string, err error) (*string, error) {
+func decodeFromBase64(source *string, err error) (*string, error) {
 	if err != nil {
 		return nil, err
 	}
+	if source == nil {
+		return nil, errors.New("decoding source is nil")
+	}
 
-	data, errData := base64.RawStdEncoding.DecodeString(*str)
-	dataStr := string(data)
+	data64, errData64 := base64.RawStdEncoding.DecodeString(*source)
+	data64AsStr := string(data64)
 
-	return &dataStr, errData
+	return &data64AsStr, errData64
 }
 
 func generateRandomByteArray(n int, err error) (*[]byte, error) {
@@ -91,8 +98,8 @@ func generateRandomByteArray(n int, err error) (*[]byte, error) {
 	}
 
 	token := make([]byte, n)
-	_, errRandom := rand.Read(token)
-	if errRandom != nil {
+	length, errRandom := rand.Read(token)
+	if errRandom != nil || length != n {
 		return nil, errRandom
 	}
 
@@ -109,6 +116,15 @@ func generateSignature(
 	secret *[]byte,
 	err error,
 ) (*string, error) {
+	if header == nil {
+		return nil, errors.New("header is nil")
+	}
+	if claims == nil {
+		return nil, errors.New("claims is nil")
+	}
+	if secret == nil {
+		return nil, errors.New("secret is nil")
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +134,7 @@ func generateSignature(
 	hmacSecret.Write([]byte(headerAndClaims))
 	signature := hmacSecret.Sum(nil)
 
-	return convertToBase64(signature)
+	return encodeToBase64(signature)
 }
 
 func createJWTClaims(params *CreateJWTParams, err error) (*string, error) {
@@ -146,12 +162,15 @@ func createJWTClaims(params *CreateJWTParams, err error) (*string, error) {
 		Sub: params.Sub,
 	}
 
-	return convertToBase64(claims)
+	return encodeToBase64(claims)
 }
 
 func retrieveTokenChunks(token *string, err error) (*TokenChunks, error) {
 	if err != nil {
 		return nil, err
+	}
+	if token == nil {
+		return nil, errors.New("token is nil")
 	}
 
 	chunks := strings.Split(*token, ".")
@@ -173,6 +192,9 @@ func unmarshalHeader(header *string, err error) (*Header, error) {
 	if err != nil {
 		return nil, err
 	}
+	if header == nil {
+		return nil, errors.New("header is nil")
+	}
 
 	var headerDetails Header
 	errHeaderMarshal := json.Unmarshal([]byte(*header), &headerDetails)
@@ -184,6 +206,9 @@ func unmarshalHeader(header *string, err error) (*Header, error) {
 func unmarshalClaims(claims *string, err error) (*Claims, error) {
 	if err != nil {
 		return nil, err
+	}
+	if claims == nil {
+		return nil, errors.New("claims is nil")
 	}
 
 	var claimsDetails Claims
@@ -198,7 +223,28 @@ func CreateJWT(params *CreateJWTParams, err error) (*TokenPayload, error) {
 	}
 
 	claims, errClaims := createJWTClaims(params, nil)
-	secret, errSecret := generateRandomByteArray(128, errClaims)
+	secret, errSecret := generateRandomByteArray(randomLength, errClaims)
+	signature, errSignature := generateSignature(headerBase64, claims, secret, errSecret)
+
+	token := fmt.Sprint(*headerBase64, periodRune, *claims, periodRune, *signature)
+	tokenPayload := TokenPayload{
+		Token:  token,
+		Secret: *secret,
+	}
+
+	return &tokenPayload, errSignature
+}
+
+func CreateJWTFromSecret(params *CreateJWTParams, secret *[]byte, err error) (*TokenPayload, error) {
+	if err != nil {
+		return nil, err
+	}
+	if secret == nil {
+		return nil, errors.New("secret is nil")
+	}
+
+	claims, errClaims := createJWTClaims(params, nil)
+	secret, errSecret := generateRandomByteArray(randomLength, errClaims)
 	signature, errSignature := generateSignature(headerBase64, claims, secret, errSecret)
 
 	token := fmt.Sprint(*headerBase64, periodRune, *claims, periodRune, *signature)
@@ -214,6 +260,9 @@ func ValidateJWT(tokenPayload *TokenPayload, err error) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	if tokenPayload == nil {
+		return false, errors.New("tokenPayload is nil")
+	}
 
 	chunks, errChunks := retrieveTokenChunks(&tokenPayload.Token, nil)
 	signature, errSignature := generateSignature(&chunks.Header, &chunks.Claims, &tokenPayload.Secret, errChunks)
@@ -227,6 +276,9 @@ func RetrieveTokenDetails(token *string, err error) (*TokenDetails, error) {
 	if err != nil {
 		return nil, err
 	}
+	if token == nil {
+		return nil, errors.New("token is nil")
+	}
 
 	chunks, errChunks := retrieveTokenChunks(token, nil)
 	header, errHeader := decodeFromBase64(&chunks.Header, errChunks)
@@ -235,8 +287,8 @@ func RetrieveTokenDetails(token *string, err error) (*TokenDetails, error) {
 	claimsDetails, errClaimsDetails := unmarshalClaims(claims, errClaims)
 
 	tokenDetails := TokenDetails{
-		Header: *headerDetails,
-		Claims: *claimsDetails,
+		Header: headerDetails,
+		Claims: claimsDetails,
 	}
 
 	return &tokenDetails, errClaimsDetails
