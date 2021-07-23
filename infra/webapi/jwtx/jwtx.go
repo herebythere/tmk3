@@ -41,8 +41,8 @@ type TokenChunks struct {
 }
 
 type TokenPayload struct {
-	Token  string `json:"token"`
-	Secret []byte `json:"secret"`
+	Token  *string `json:"token"`
+	Secret *[]byte `json:"secret"`
 }
 
 type TokenDetails struct {
@@ -187,7 +187,6 @@ func retrieveTokenChunks(token *string, err error) (*TokenChunks, error) {
 	return &tokenChunks, nil
 }
 
-// untested
 func unmarshalHeader(header *string, err error) (*Header, error) {
 	if err != nil {
 		return nil, err
@@ -202,7 +201,6 @@ func unmarshalHeader(header *string, err error) (*Header, error) {
 	return &headerDetails, errHeaderMarshal
 }
 
-// untested
 func unmarshalClaims(claims *string, err error) (*Claims, error) {
 	if err != nil {
 		return nil, err
@@ -228,8 +226,8 @@ func CreateJWT(params *CreateJWTParams, err error) (*TokenPayload, error) {
 
 	token := fmt.Sprint(*headerBase64, periodRune, *claims, periodRune, *signature)
 	tokenPayload := TokenPayload{
-		Token:  token,
-		Secret: *secret,
+		Token:  &token,
+		Secret: secret,
 	}
 
 	return &tokenPayload, errSignature
@@ -249,8 +247,8 @@ func CreateJWTFromSecret(params *CreateJWTParams, secret *[]byte, err error) (*T
 
 	token := fmt.Sprint(*headerBase64, periodRune, *claims, periodRune, *signature)
 	tokenPayload := TokenPayload{
-		Token:  token,
-		Secret: *secret,
+		Token:  &token,
+		Secret: secret,
 	}
 
 	return &tokenPayload, errSignature
@@ -264,14 +262,13 @@ func ValidateJWT(tokenPayload *TokenPayload, err error) (bool, error) {
 		return false, errors.New("tokenPayload is nil")
 	}
 
-	chunks, errChunks := retrieveTokenChunks(&tokenPayload.Token, nil)
-	signature, errSignature := generateSignature(&chunks.Header, &chunks.Claims, &tokenPayload.Secret, errChunks)
+	chunks, errChunks := retrieveTokenChunks(tokenPayload.Token, nil)
+	signature, errSignature := generateSignature(&chunks.Header, &chunks.Claims, tokenPayload.Secret, errChunks)
 	signatureIsValid := *signature == chunks.Signature
 
 	return signatureIsValid, errSignature
 }
 
-// untested
 func RetrieveTokenDetails(token *string, err error) (*TokenDetails, error) {
 	if err != nil {
 		return nil, err
