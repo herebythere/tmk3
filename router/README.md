@@ -2,9 +2,6 @@
 
 Route to local services.
 
-This gateway exists only to pass requests to containers on a 
-local machine. It's not an endpoint.
-
 ## Setup
 
 Place cert files in the `/config` directory.
