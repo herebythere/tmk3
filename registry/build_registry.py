@@ -27,6 +27,7 @@ def create_template(source, target, keywords):
 def create_required_templates(config):
     server_conf = config["server"]
     config_conf = config["config"]
+    credentials_conf = config["credentials"]
     skeleton_keys_conf = config["skeleton_keys"]
 
     create_template("templates/webapi.dockerfile.template",
@@ -37,6 +38,8 @@ def create_required_templates(config):
                                            "https_port": server_conf["https_port"],
                                            "config_filepath": config_conf["filepath"],
                                            "config_filepath_test": config_conf["filepath_test"],
+                                           "credentials_filepath": credentials_conf["filepath"],
+                                           "credentials_filepath_test": credentials_conf["filepath_test"],
                                            "skeleton_keys_filepath": skeleton_keys_conf["filepath"],
                                            "skeleton_keys_filepath_test": skeleton_keys_conf["filepath_test"]})
 

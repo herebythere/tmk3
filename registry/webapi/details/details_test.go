@@ -1,16 +1,15 @@
 package details
 
 import (
-	"encoding/json"
 	"os"
 	"testing"
-
-	"fmt"
 )
 
 var (
-	exampleDetailsPath                                     = os.Getenv("CONFIG_FILEPATH_TEST")
-	exampleSkeletonKeysPath                                = os.Getenv("SKELETON_KEYS_FILEPATH_TEST")
+	exampleDetailsPath      = os.Getenv("CONFIG_FILEPATH_TEST")
+	exampleSkeletonKeysPath = os.Getenv("SKELETON_KEYS_FILEPATH_TEST")
+	exampleCredentialsPath  = os.Getenv("CREDENTIALS_FILEPATH_TEST")
+
 	testSaltedUsers, testUserRoles, errTestSkeletonDetails = parseSkeletonKeys(exampleSkeletonKeysPath)
 	testSkeletonKeysJSON, errTestSkeletonKeysJSON          = readFile(exampleSkeletonKeysPath)
 )
@@ -28,7 +27,7 @@ func TestReadFile(t *testing.T) {
 	}
 }
 
-func TestParseDetails(t *testing.T) {
+func TestParseConfigDetails(t *testing.T) {
 	exampleDetails, errExampleDetails := parseConfigDetails(exampleDetailsPath)
 
 	if exampleDetails == nil {
@@ -39,6 +38,18 @@ func TestParseDetails(t *testing.T) {
 	if errExampleDetails != nil {
 		t.Fail()
 		t.Logf(errExampleDetails.Error())
+	}
+}
+
+func TestParseCredentialDetails(t *testing.T) {
+	credentials, errCredentials := parseCredentialDetails(exampleCredentialsPath)
+	if credentials == nil {
+		t.Fail()
+		t.Logf("There should be credentials that can be parsed")
+	}
+	if errCredentials != nil {
+		t.Fail()
+		t.Logf(errCredentials.Error())
 	}
 }
 
@@ -61,9 +72,9 @@ func TestParseSkeletonKeys(t *testing.T) {
 	}
 }
 
-func TestBuildAvailableServicesFromDetails(t *testing.T) {
+func TestBuildAvailableRolesFromDetails(t *testing.T) {
 	exampleDetails, errExampleDetails := parseConfigDetails(exampleDetailsPath)
-	services, errServices := buildAvailableServicesFromDetails(
+	services, errServices := buildAvailableRolesFromDetails(
 		exampleDetails,
 		errExampleDetails,
 	)
@@ -76,76 +87,5 @@ func TestBuildAvailableServicesFromDetails(t *testing.T) {
 	if services == nil {
 		t.Fail()
 		t.Logf("There should be services that can be parsed")
-	}
-}
-
-func TestVerifySkeletonKey(t *testing.T) {
-	var testSkeletonKeys SkeletonKeyMap
-	errTestSkeletonKeys := json.Unmarshal(*testSkeletonKeysJSON, &testSkeletonKeys)
-	if errTestSkeletonKeys != nil {
-		t.Fail()
-		t.Logf(errTestSkeletonKeys.Error())
-	}
-
-	for user, details := range testSkeletonKeys {
-		userIdentity := UserIdentity{
-			Username: user,
-			Password: details.Password,
-		}
-		skeletonKeyIsVerified, errVerifySkeletonKey := VerifySkeletonKey(testSaltedUsers, &userIdentity, nil)
-		if errVerifySkeletonKey != nil {
-			t.Fail()
-			t.Logf(errVerifySkeletonKey.Error())
-		}
-
-		if !skeletonKeyIsVerified {
-			t.Fail()
-			t.Logf("Skeleton Key was not valid")
-		}
-	}
-}
-
-func TestVerifySkeletonKeyRoleAsAvailableService(t *testing.T) {
-	exampleDetails, errExampleDetails := parseConfigDetails(exampleDetailsPath)
-	exampleServices, errExampleServices := buildAvailableServicesFromDetails(
-		exampleDetails,
-		errExampleDetails,
-	)
-	if errExampleServices != nil {
-		t.Fail()
-		t.Logf(errExampleServices.Error())
-	}
-
-	var testSkeletonKeys SkeletonKeyMap
-	errTestSkeletonKeys := json.Unmarshal(*testSkeletonKeysJSON, &testSkeletonKeys)
-	if errTestSkeletonKeys != nil {
-		t.Fail()
-		t.Logf(errTestSkeletonKeys.Error())
-	}
-
-	for user, details := range testSkeletonKeys {
-		userIdentity := UserIdentity{
-			Username: user,
-			Password: details.Password,
-		}
-
-		for roleIndex, role := range details.Roles {
-			roleExists, errRoleExists := VerifySkeletonKeyRoleAsAvailableService(
-				exampleServices,
-				testUserRoles,
-				&userIdentity,
-				role,
-				nil,
-			)
-			if errRoleExists != nil {
-				t.Fail()
-				t.Logf(errRoleExists.Error())
-			}
-
-			if !roleExists {
-				t.Fail()
-				t.Logf(fmt.Sprint(roleIndex, role, roleDoesNotExist))
-			}
-		}
 	}
 }

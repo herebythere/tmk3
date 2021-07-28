@@ -107,7 +107,7 @@ func generateRandomByteArray(n int, err error) (*[]byte, error) {
 }
 
 func getNowAsSecond() int64 {
-	return time.Now().UnixNano() / int64(time.Second)
+	return time.Now().Unix()
 }
 
 func generateSignature(

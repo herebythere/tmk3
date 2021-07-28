@@ -15,6 +15,8 @@ services:
     environment:
       - CONFIG_FILEPATH=${config_filepath}
       - CONFIG_FILEPATH_TEST=${config_filepath_test}
+      - CREDENTIALS_FILEPATH=${credentials_filepath}
+      - CREDENTIALS_FILEPATH_TEST=${credentials_filepath_test}
       - SKELETON_KEYS_FILEPATH=${skeleton_keys_filepath}
       - SKELETON_KEYS_FILEPATH_TEST=${skeleton_keys_filepath_test}
     command: "go run /usr/lib/go/src/webapi/main.go"

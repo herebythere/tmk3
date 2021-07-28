@@ -1,19 +1,25 @@
 package sessions
 
 import (
+	"errors"
+
+	"webapi/details"
 	"webapi/jwtx"
 )
 
-// jwt payload
 
-// we get a request
-// parse the session in the request
-//
+func writeJWTToCache() {
 
-// json parse body
+}
 
-// create session from details
-// -> save to cache, return session
+func readJWTFromCache() {
+	
+}
+
+func CreateGuestSession() {
+
+}
+
 func CreateServerSession(
 	params *jwtx.CreateJWTParams,
 	err error,
@@ -31,13 +37,14 @@ func CreateServerSession(
 func ValidateSession(
 	tokenPayload *TokenPayload,
 	err error,
-) {
+) (bool, error) {
 	if err != nil {
 		return nil, err
 	}
+	if token == nil {
+		return nil, errors.New("nil token provided")
+	}
 
-	return jtwx.ValidateJWT(params, nil)
+	return jtwx.ValidateJWT(tokenPayload, nil)
 }
 
-// validate session
-// -> request from cache, return ok not okay

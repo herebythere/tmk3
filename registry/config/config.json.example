@@ -8,6 +8,10 @@
     "filepath": "/usr/local/config/skeleton_keys.json",
     "filepath_test": "/usr/local/config/skeleton_keys.json.example"
   },
+  "credentials": {
+    "filepath": "/usr/local/config/credentials.json",
+    "filepath_test": "/usr/local/config/credentials.json.example"
+  },
   "server": {
     "https_port": 5000,
     "idle_timeout": 5,
@@ -19,11 +23,11 @@
     "private_key": "/usr/local/config/privkey.pem"
   },
   "cache_address": "https://10.88.0.1:5010",
-  "available_services": [
-    "db_overlord",
-    "cache_overlord",
-    "media_overlord",
-    "logs_overlord",
-    "registry_overlord"
+  "available_roles": [
+    "db_host",
+    "cache_host",
+    "media_host",
+    "logs_host",
+    "registry_host"
   ]
 }

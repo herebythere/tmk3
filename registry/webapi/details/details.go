@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"webapi/passwordx"
+	"webapi/typeflyweights/person"
 )
 
 type ConfigDetails struct {
@@ -30,12 +31,13 @@ type CertPaths struct {
 }
 
 type RegistryDetails struct {
-	AvailableServices []string      `json:"available_services"`
-	CacheAddress      string        `json:"cache_address"`
-	CertPaths         CertPaths     `json:"cert_paths"`
-	Config            ConfigDetails `json:"config"`
-	Server            ServerDetails `json:"server"`
-	ServiceName       string        `json:"service_name"`
+	AvailableRoles []string      `json:"available_roles"`
+	CacheAddress   string        `json:"cache_address"`
+	CertPaths      CertPaths     `json:"cert_paths"`
+	Config         ConfigDetails `json:"config"`
+	Credentials    ConfigDetails `json:"credentials"`
+	Server         ServerDetails `json:"server"`
+	ServiceName    string        `json:"service_name"`
 }
 
 type KeyDetails struct {
@@ -43,29 +45,21 @@ type KeyDetails struct {
 	Roles    []string `json:"roles"`
 }
 
-type UserIdentity struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 type SkeletonKeyMap = map[string]KeyDetails
 type SaltedKeyMap = map[string]passwordx.HashResults
 type SkeletonKeyRoleMap = map[string]map[string]int
 type AvailableServiceMap = map[string]int
 
-const (
-	skeletonKeyDoesNotExist = "SkeletonKey does not exist"
-	roleDoesNotExist        = "Role does not exist"
-)
 
 var (
-	detailsPath         = os.Getenv("CONFIG_FILEPATH")
 	configDetailsPath   = os.Getenv("CONFIG_FILEPATH")
-	skeletonDetailsPath = os.Getenv("SKELETON_FILEPATH")
+	skeletonDetailsPath = os.Getenv("SKELETON_KEYS_FILEPATH")
+	credentialsDetailsPath = os.Getenv("CREDENTIALS_FILEPATH")
 
 	SaltedSkeletonKeys, SkeletonKeyRoles, errSkeletonKeys = parseSkeletonKeys(skeletonDetailsPath)
 	ConfDetails, errConfDetails                           = parseConfigDetails(configDetailsPath)
-	AvailableServices, errAvailableService                = buildAvailableServicesFromDetails(ConfDetails, errConfDetails)
+	Credentials, errCredentials                     	  = parseCredentialDetails(credentialsDetailsPath)
+	AvailableRoles, errAvailableRoles                     = buildAvailableRolesFromDetails(ConfDetails, errConfDetails)
 )
 
 func readFile(path string) (*[]byte, error) {
@@ -85,7 +79,7 @@ func parseConfigDetails(path string) (*RegistryDetails, error) {
 	return &details, errDetails
 }
 
-func buildAvailableServicesFromDetails(
+func buildAvailableRolesFromDetails(
 	details *RegistryDetails,
 	err error,
 ) (
@@ -100,7 +94,7 @@ func buildAvailableServicesFromDetails(
 	}
 
 	services := AvailableServiceMap{}
-	for serviceIndex, service := range details.AvailableServices {
+	for serviceIndex, service := range details.AvailableRoles {
 		services[service] = serviceIndex
 	}
 
@@ -148,54 +142,14 @@ func parseSkeletonKeys(path string) (
 	return saltedSkeletonKeys, SkeletonKeyRoles, errSkeletonKeys
 }
 
-func VerifySkeletonKey(
-	saltedKeys SaltedKeyMap,
-	userIdentity *UserIdentity,
-	err error,
-) (bool, error) {
-	if err != nil {
-		return false, err
+func parseCredentialDetails(path string) (*person.PersonCredentialDetails, error) {
+	detailsJSON, errDetailsJSON := readFile(path)
+	if errDetailsJSON != nil {
+		return nil, errDetailsJSON
 	}
 
-	hashResults, hashResultsExists := saltedKeys[userIdentity.Username]
-	if hashResultsExists {
-		return passwordx.PasswordIsValid(
-			userIdentity.Password,
-			&hashResults,
-		)
-	}
+	var details person.PersonCredentialDetails
+	errDetails := json.Unmarshal(*detailsJSON, &details)
 
-	return false, errors.New(skeletonKeyDoesNotExist)
-}
-
-func VerifySkeletonKeyRoleAsAvailableService(
-	services AvailableServiceMap,
-	roles SkeletonKeyRoleMap,
-	userIdentity *UserIdentity,
-	role string,
-	err error,
-) (
-	bool,
-	error,
-) {
-	if err != nil {
-		return false, err
-	}
-
-	roleMap, roleMapExists := roles[userIdentity.Username]
-	if !roleMapExists {
-		return false, errors.New(roleDoesNotExist)
-	}
-
-	_, roleExists := roleMap[role]
-	if !roleExists {
-		return false, errors.New(roleDoesNotExist)
-	}
-
-	_, roleExists = services[role]
-	if roleExists {
-		return true, nil
-	}
-
-	return false, errors.New(roleDoesNotExist)
+	return &details, errDetails
 }

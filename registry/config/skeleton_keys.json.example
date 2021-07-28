@@ -2,7 +2,7 @@
     "superawesomeuser": {
         "password": "superpassword",
         "roles": [
-            "registry_overlord"
+            "registry_host"
         ]
     }
 }
