@@ -51,7 +51,7 @@ type TokenDetails struct {
 }
 
 const (
-	periodRune = "."
+	periodRune   = "."
 	randomLength = 128
 )
 

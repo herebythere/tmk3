@@ -1,12 +1,12 @@
 package redisx
 
 import (
-	"testing"
 	"github.com/gomodule/redigo/redis"
+	"testing"
 )
 
 const (
-	testEntry = "hello_world_test"
+	testEntry       = "hello_world_test"
 	testEntryResult = "how_are_you_starshine?"
 )
 

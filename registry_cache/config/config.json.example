@@ -1,5 +1,5 @@
 {
-  "service_name": "registry_cache",
+  "service_name": "registry_store",
   "config": {
     "filepath": "/usr/local/config/config.json",
     "filepath_test": "/usr/local/config/config.json.example"

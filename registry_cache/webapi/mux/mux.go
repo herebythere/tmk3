@@ -3,18 +3,18 @@
 package mux
 
 import (
-	"errors"
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"webapi/redisx"
 )
 
 const (
-	contentType = "Content-Type"
+	contentType     = "Content-Type"
 	applicationJson = "application/json"
-	execRoute   = "/"
-	post =	"POST"
+	execRoute       = "/"
+	post            = "POST"
 )
 
 type ErrorEntity struct {
@@ -29,7 +29,7 @@ const (
 )
 
 var (
-	errMethodMessage = errors.New("request method is not GET")
+	errMethodMessage  = errors.New("request method is not GET")
 	errNilRequestBody = errors.New("request body is nil")
 )
 
@@ -37,7 +37,7 @@ func validPost(r *http.Request) error {
 	if r.Method == post {
 		return nil
 	}
-	
+
 	return errMethodMessage
 }
 
@@ -59,7 +59,7 @@ func getBody(r *http.Request, err error) (*[]interface{}, error) {
 func writeError(w http.ResponseWriter, kind string, message string) {
 	setErrors := ErrorDeclarations{
 		ErrorEntity{
-			Kind: kind,
+			Kind:    kind,
 			Message: message,
 		},
 	}
@@ -90,7 +90,7 @@ func exec(w http.ResponseWriter, r *http.Request) {
 
 func CreateMux() *http.ServeMux {
 	mux := http.NewServeMux()
-	
+
 	mux.HandleFunc(execRoute, exec)
 
 	return mux

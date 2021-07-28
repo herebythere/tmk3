@@ -1,20 +1,19 @@
 package mux
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"encoding/json"
 	"testing"
-	"bytes"
-	
 	// "webapi/setterx"
 )
 
 const (
-	testKind = "test kind"
+	testKind    = "test kind"
 	testMessage = "test message"
-	statusOk = 200
+	statusOk    = 200
 	statusNotOk = 400
 )
 
@@ -96,14 +95,13 @@ func TestGetBody(t *testing.T) {
 		return
 	}
 
-
 	reqBody, errReqBody := getBody(req, nil)
 	if errReqBody != nil {
 		t.Fail()
 		t.Logf(fmt.Sprint("expected an array, ", errReqBody.Error()))
 		return
 	}
-	
+
 	if reqBody == nil {
 		t.Fail()
 		t.Logf(fmt.Sprint("request body is nil"))

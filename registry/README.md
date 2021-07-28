@@ -1,19 +1,25 @@
-# Infra
+# Registry
 
 Authorize, track, and broadcast to micro-service components
 
-## Requiured Roles
 
-cache_server_init
+validate skeleton user
+validate skeleton key role
 
-database_server_init
+create server session
+validate session
 
-gateway_server_init
+// lazy session update
+// if session is expired create new one and store it
 
-infra_server_init
 
-log_server_init
+// server state
+// 
 
-mail_server_init
 
-queue_server_init
+lifecycle, is this necessary?
+// unregistered
+// registered
+// reregistered
+// figure that out
+

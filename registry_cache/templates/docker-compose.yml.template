@@ -1,6 +1,16 @@
 version: "3"
 services:
+  cache:
+    container_name: ${service_name}_${http_port}_cache
+    build:
+      context: ./cache_store/
+      dockerfile: dockerfile
+    restart: always
+    volumes:
+      - ./cache_store/data/:/data
   webapi:
+    depends_on:
+      - ${service_name}_${http_port}_cache
     container_name: ${service_name}_${http_port}
     build:
       context: ./webapi/
@@ -15,13 +25,4 @@ services:
       - CONFIG_FILEPATH=${filepath}
       - CONFIG_FILEPATH_TEST=${filepath_test}
     command: "go run /usr/lib/go/src/webapi/main.go"
-  cache:
-    depends_on:
-      - ${service_name}_${http_port}
-    container_name: ${service_name}_${http_port}_cache
-    build:
-      context: ./cache_store/
-      dockerfile: dockerfile
-    restart: always
-    volumes:
-      - ./cache_store/data/:/data
+

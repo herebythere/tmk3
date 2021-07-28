@@ -62,7 +62,7 @@ func Exec(args *[]interface{}, err error) (interface{}, error) {
 	if len(*args) < 2 {
 		return nil, errors.New("1 or fewer arguments provided")
 	}
-	
+
 	conn := pool.Get()
 	defer conn.Close()
 
@@ -72,4 +72,3 @@ func Exec(args *[]interface{}, err error) (interface{}, error) {
 
 	return conn.Do(firstArg, restArgs...)
 }
-

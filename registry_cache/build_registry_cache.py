@@ -1,4 +1,4 @@
-# build_and_run_supercache
+# build_registry_cache
 # brian taylor vann
 
 import os
@@ -58,19 +58,12 @@ def create_required_templates(config):
                     compose_conf)
 
 
-def build_and_run_podman():
-    subprocess.run(["podman-compose", "--file",
-                   "./docker-compose.yml", "down"])
-
+def build_with_podman():
     subprocess.run(["podman-compose", "--file",
                    "./docker-compose.yml", "build"])
-
-    subprocess.run(["podman-compose", "--file",
-                   "./docker-compose.yml", "up", "--detach"])
-
 
 if __name__ == "__main__":
     create_required_directories()
     config = get_config("config/config.json")
     create_required_templates(config)
-    build_and_run_podman()
+    # build_with_podman()

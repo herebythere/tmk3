@@ -16,6 +16,9 @@ var (
 )
 
 func main() {
+	// verify user
+	// quite otherwise
+
 	proxyMux := mux.CreateMux()
 
 	err := http.ListenAndServeTLS(

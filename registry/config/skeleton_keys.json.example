@@ -2,8 +2,7 @@
     "superawesomeuser": {
         "password": "superpassword",
         "roles": [
-            "fantastic_service_name",
-            "another_amazing_service_name"
+            "registry_overlord"
         ]
     }
 }

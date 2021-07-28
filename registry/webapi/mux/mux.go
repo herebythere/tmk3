@@ -12,7 +12,8 @@ const (
 	contentType     = "Content-Type"
 	applicationJson = "application/json"
 	execRoute       = "/"
-	post            = "POST"
+
+	post = "POST"
 )
 
 type ErrorEntity struct {

@@ -11,8 +11,8 @@ import (
 )
 
 type ConfigDetails struct {
-	Filepath      string `json:"filepath"`
-	FilepathTest  string `json:"filepath_test"`
+	Filepath     string `json:"filepath"`
+	FilepathTest string `json:"filepath_test"`
 }
 
 type ServerDetails struct {
@@ -23,18 +23,18 @@ type ServerDetails struct {
 }
 
 type CacheDetails struct {
-	Host        string				`json:"redis_host"`
-	IdleTimeout time.Duration	`json:"idle_timeout"`
-	MaxActive   int						`json:"max_active"`
-	MaxIdle     int						`json:"max_idle"`
-	MaxSizeInMB	string				`json:"max_size_in_mb"`
-	Port        int						`json:"redis_port"`
-	Protocol    string				`json:"protocol"`
+	Host        string        `json:"redis_host"`
+	IdleTimeout time.Duration `json:"idle_timeout"`
+	MaxActive   int           `json:"max_active"`
+	MaxIdle     int           `json:"max_idle"`
+	MaxSizeInMB string        `json:"max_size_in_mb"`
+	Port        int           `json:"redis_port"`
+	Protocol    string        `json:"protocol"`
 }
 
 type SuperCacheDetails struct {
 	ServiceName string        `json:"service_name"`
-	Config		ConfigDetails `json:"config"`
+	Config      ConfigDetails `json:"config"`
 	Server      ServerDetails `json:"server"`
 	Cache       CacheDetails  `json:"cache"`
 }
