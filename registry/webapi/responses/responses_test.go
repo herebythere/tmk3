@@ -17,7 +17,7 @@ const (
 
 func TestWriteError(t *testing.T) {
 	testRecorder := httptest.NewRecorder()
-	writeError(testRecorder, testKind, testMessage)
+	WriteError(testRecorder, testKind, testMessage)
 
 	if testRecorder.Code != statusNotOk {
 		t.Fail()
@@ -46,7 +46,7 @@ func TestWriteError(t *testing.T) {
 
 func TestWriteResponse(t *testing.T) {
 	testRecorder := httptest.NewRecorder()
-	writeResponse(testRecorder, testMessage, nil)
+	WriteResponse(testRecorder, testMessage, nil)
 
 	if testRecorder.Code != statusOk {
 		t.Fail()

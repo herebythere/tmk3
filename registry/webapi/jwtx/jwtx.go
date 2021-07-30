@@ -41,8 +41,9 @@ type TokenChunks struct {
 }
 
 type TokenPayload struct {
-	Token  *string `json:"token"`
-	Secret *[]byte `json:"secret"`
+	Token 		*string	`json:"token"`
+	Secret		*[]byte	`json:"secret"`
+	Signature	*string	`json:"signature"`
 }
 
 type TokenDetails struct {
@@ -228,6 +229,7 @@ func CreateJWT(params *CreateJWTParams, err error) (*TokenPayload, error) {
 	tokenPayload := TokenPayload{
 		Token:  &token,
 		Secret: secret,
+		Signature: signature,
 	}
 
 	return &tokenPayload, errSignature
@@ -249,6 +251,7 @@ func CreateJWTFromSecret(params *CreateJWTParams, secret *[]byte, err error) (*T
 	tokenPayload := TokenPayload{
 		Token:  &token,
 		Secret: secret,
+		Signature: signature,
 	}
 
 	return &tokenPayload, errSignature

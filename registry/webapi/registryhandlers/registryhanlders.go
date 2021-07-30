@@ -1,11 +1,20 @@
 package registryhanlders
 
 import (
-	"http"
+	"net/http"
+
+	"webapi/responses"
 )
 
 
 func Ping(w http.ResponseWriter, r *http.Request) {
+	// rate limit
+	//
+
+	responses.WriteResponse(h, nil, nil)
+}
+
+func RequestGuestSession(w http.ResponseWriter, r *http.Request) {
 	// rate limit
 	//
 	// return okay! easy

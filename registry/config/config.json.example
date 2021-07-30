@@ -22,7 +22,7 @@
     "cert": "/usr/local/config/fullchain.pem",
     "private_key": "/usr/local/config/privkey.pem"
   },
-  "cache_address": "https://10.88.0.1:5010",
+  "cache_address": "http://10.88.0.1:5010",
   "available_roles": [
     "db_host",
     "cache_host",

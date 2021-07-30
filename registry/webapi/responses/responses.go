@@ -1,6 +1,6 @@
 package responses
 
-func writeError(w http.ResponseWriter, kind string, message string) {
+func WriteError(w http.ResponseWriter, kind string, message string) {
 	setErrors := ErrorDeclarations{
 		ErrorEntity{
 			Kind:    kind,
@@ -13,7 +13,7 @@ func writeError(w http.ResponseWriter, kind string, message string) {
 	json.NewEncoder(w).Encode(setErrors)
 }
 
-func writeResponse(w http.ResponseWriter, entry interface{}, err error) {
+func WriteResponse(w http.ResponseWriter, entry interface{}, err error) {
 	if err != nil {
 		writeError(w, failedToExec, err.Error())
 		return
@@ -21,5 +21,7 @@ func writeResponse(w http.ResponseWriter, entry interface{}, err error) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set(contentType, applicationJson)
-	json.NewEncoder(w).Encode(entry)
+	if entry != nil {
+		json.NewEncoder(w).Encode(entry)
+	}
 }
