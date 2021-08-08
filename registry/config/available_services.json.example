@@ -1,0 +1,11 @@
+[
+    "backup",
+    "broadcast",
+    "cache",
+    "db",
+    "logs",
+    "mail",
+    "media",
+    "registry",
+    "router"
+]

@@ -16,27 +16,24 @@ type ConfigDetails struct {
 
 type ServerDetails struct {
 	HTTPPort     int `json:"http_port"`
-	HTTPSPort    int `json:"https_port"`
+	MXPort		 int `json:"mx_port"`
 	IdleTimeout  int `json:"idle_timeout"`
 	ReadTimeout  int `json:"read_timeout"`
 	WriteTimeout int `json:"write_timeout"`
 }
 
-type CertPaths struct {
-	Cert       string `json:"cert"`
-	PrivateKey string `json:"private_key"`
+type CertsDetails struct {
+	CertFilePath       string `json:"cert_filepath"`
+	PrivateKeyFilePath string `json:"private_key_filepath"`
 }
 
-type GatewayDetails struct {
+type MailDetails struct {
 	ServiceName string            `json:"service_name"`
+	TLD			string            `json:"tld"`
 	Config      ConfigDetails     `json:"config"`
-	CertPaths   CertPaths         `json:"cert_paths"`
-	Routes      map[string]string `json:"routes"`
+	Certs	    CertsDetails	  `json:"certs"`
 	Server      ServerDetails     `json:"server"`
 }
-
-const (
-)
 
 var (
 	detailsPath = os.Getenv("CONFIG_FILEPATH")
@@ -48,18 +45,18 @@ func readFile(path string) (*[]byte, error) {
 	return &detailsJSON, errDetiailsJSON
 }
 
-func parseDetails(detailsJSON *[]byte, err error) (*GatewayDetails, error) {
+func parseDetails(detailsJSON *[]byte, err error) (*MailDetails, error) {
 	if err != nil {
 		return nil, err
 	}
 
-	var details GatewayDetails
+	var details MailDetails
 	errDetails := json.Unmarshal(*detailsJSON, &details)
 
 	return &details, errDetails
 }
 
-func ReadDetailsFromFile(path string) (*GatewayDetails, error) {
+func ReadDetailsFromFile(path string) (*MailDetails, error) {
 	detailsJSON, errDetailsJSON := readFile(path)
 	return parseDetails(detailsJSON, errDetailsJSON)
 }

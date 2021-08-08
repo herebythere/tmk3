@@ -28,7 +28,12 @@ def create_template(source, target, keywords):
 def create_required_templates(config):
     server_conf = config["server"]
     config_conf = config["config"]
+    cert_conf = config["certs"]
 
+    create_template("templates/main.cf.template",
+                    "webapi/main.cf", {"domain_tld": config["tld"],
+                                       "cert_filepath": cert_conf["cert_filepath"],
+                                       "private_key_filepath": cert_conf["private_key_filepath"]})
 
     create_template("templates/webapi.dockerfile.template",
                     "webapi/dockerfile", server_conf)
@@ -36,7 +41,7 @@ def create_required_templates(config):
     create_template("templates/docker-compose.yml.template",
                     "docker-compose.yml", {"service_name": config["service_name"],
                                            "http_port": server_conf["http_port"],
-                                           "https_port": server_conf["https_port"],
+                                           "mx_port": server_conf["mx_port"],
                                            "filepath": config_conf["filepath"],
                                            "filepath_test": config_conf["filepath_test"]})
 

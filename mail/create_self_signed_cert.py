@@ -4,7 +4,7 @@
 import subprocess
 
 def build_and_run_podman():
-    subprocess.run(["openssl", "req", "-x509", "-nodes", "-newkey", "rsa:4096", "-keyout", "key.pem", "-out",
+    subprocess.run(["openssl", "req", "-x509", "-nodes", "-newkey", "rsa:4096", "-keyout", "privkey.pem", "-out",
                    "fullchain.pem", "-days", "365", "-subj", "/C=US/ST=California/L=San Francisco/O=Company/OU=Org/CN=www.example.com"])
 
 

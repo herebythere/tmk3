@@ -1,7 +1,7 @@
 {
     "superawesomeuser": {
         "password": "superpassword",
-        "roles": [
+        "services": [
             "registry_host"
         ]
     }

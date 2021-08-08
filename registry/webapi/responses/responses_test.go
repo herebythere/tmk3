@@ -67,3 +67,4 @@ func TestWriteResponse(t *testing.T) {
 		t.Logf(fmt.Sprint("expected: ", testMessage, ", found: ", result))
 	}
 }
+

@@ -8,15 +8,20 @@ services:
       context: ./webapi/
       dockerfile: dockerfile
     ports:
-      - "${https_port}:443"
+      - "${https_port}:${https_port}"
     volumes:
       - ./config/:/usr/local/config/
       - ./webapi/:/usr/lib/go/src/webapi/
     environment:
-      - CONFIG_FILEPATH=${config_filepath}
+      - AVAILABLE_SERVICES_FILEPATH_TEST=${available_services_filepath_test}
+      - AVAILABLE_SERVICES_FILEPATH=${available_services_filepath}
       - CONFIG_FILEPATH_TEST=${config_filepath_test}
-      - CREDENTIALS_FILEPATH=${credentials_filepath}
+      - CONFIG_FILEPATH=${config_filepath}
       - CREDENTIALS_FILEPATH_TEST=${credentials_filepath_test}
-      - SKELETON_KEYS_FILEPATH=${skeleton_keys_filepath}
+      - CREDENTIALS_FILEPATH=${credentials_filepath}
+      - LOCAL_CACHE_ADDRESS=${local_cache_address}
+      - SERVICE_NAME=${service_name}
+      - SESSION_COOKIE_LABEL=${session_cookie_label}
       - SKELETON_KEYS_FILEPATH_TEST=${skeleton_keys_filepath_test}
+      - SKELETON_KEYS_FILEPATH=${skeleton_keys_filepath}
     command: "go run /usr/lib/go/src/webapi/main.go"

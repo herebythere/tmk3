@@ -1,0 +1,11 @@
+FROM alpine:latest
+
+RUN apk --update add --no-cache build-base git go postfix mailx
+
+VOLUME [ "/usr/lib/go/src/webapi/", "/usr/local/config/" ]
+
+COPY main.cf /etc/postfix/
+
+WORKDIR /usr/lib/go/src/webapi/
+
+EXPOSE ${http_port} 587

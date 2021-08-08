@@ -1,0 +1,19 @@
+{
+  "service_name": "supermail",
+  "tld": "awesome-opposum.com",
+  "config": {
+    "filepath": "/usr/local/config/config.json",
+    "filepath_test": "/usr/local/config/config.json.example"
+  },
+  "certs": {
+    "cert_filepath": "/usr/local/config/fullchain.pem",
+    "private_key_filepath": "/usr/local/config/privkey.pem"
+  },
+  "server": {
+    "http_port": 3035,
+    "mx_port": 3587,
+    "idle_timeout": 3,
+    "read_timeout": 3,
+    "write_timeout": 5
+  }
+}

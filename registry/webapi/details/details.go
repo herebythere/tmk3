@@ -1,16 +1,13 @@
-// brian taylor vann
-// details
-
 package details
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"os"
 
-	"webapi/passwordx"
 	"webapi/typeflyweights/person"
+
+	snowprintx "github.com/herebythere/snowprintx/v0.1/golang"
 )
 
 type ConfigDetails struct {
@@ -19,10 +16,14 @@ type ConfigDetails struct {
 }
 
 type ServerDetails struct {
-	HTTPSPort    int `json:"https_port"`
-	IdleTimeout  int `json:"idle_timeout"`
-	ReadTimeout  int `json:"read_timeout"`
-	WriteTimeout int `json:"write_timeout"`
+	CacheAddress       string `json:"cache_address"`
+	GuestCookieLabel   string `json:"guest_cookie_label"`
+	HTTPSPort          int64  `json:"https_port"`
+	IdleTimeout        int64  `json:"idle_timeout"`
+	RateLimit          int64  `json:"rate_limit"`
+	ReadTimeout        int64  `json:"read_timeout"`
+	SessionCookieLabel string `json:"session_cookie_label"`
+	WriteTimeout       int64  `json:"write_timeout"`
 }
 
 type CertPaths struct {
@@ -31,35 +32,24 @@ type CertPaths struct {
 }
 
 type RegistryDetails struct {
-	AvailableRoles []string      `json:"available_roles"`
-	CacheAddress   string        `json:"cache_address"`
-	CertPaths      CertPaths     `json:"cert_paths"`
-	Config         ConfigDetails `json:"config"`
-	Credentials    ConfigDetails `json:"credentials"`
-	Server         ServerDetails `json:"server"`
-	ServiceName    string        `json:"service_name"`
+	CertPaths         CertPaths     `json:"cert_paths"`
+	AvailableServices ConfigDetails `json:"available_services"`
+	Config            ConfigDetails `json:"config"`
+	Credentials       ConfigDetails `json:"credentials"`
+	Server            ServerDetails `json:"server"`
+	ServiceName       string        `json:"service_name"`
 }
-
-type KeyDetails struct {
-	Password string   `json:"password"`
-	Roles    []string `json:"roles"`
-}
-
-type SkeletonKeyMap = map[string]KeyDetails
-type SaltedKeyMap = map[string]passwordx.HashResults
-type SkeletonKeyRoleMap = map[string]map[string]int
-type AvailableServiceMap = map[string]int
-
 
 var (
-	configDetailsPath   = os.Getenv("CONFIG_FILEPATH")
-	skeletonDetailsPath = os.Getenv("SKELETON_KEYS_FILEPATH")
+	configDetailsPath      = os.Getenv("CONFIG_FILEPATH")
 	credentialsDetailsPath = os.Getenv("CREDENTIALS_FILEPATH")
 
-	SaltedSkeletonKeys, SkeletonKeyRoles, errSkeletonKeys = parseSkeletonKeys(skeletonDetailsPath)
-	ConfDetails, errConfDetails                           = parseConfigDetails(configDetailsPath)
-	Credentials, errCredentials                     	  = parseCredentialDetails(credentialsDetailsPath)
-	AvailableRoles, errAvailableRoles                     = buildAvailableRolesFromDetails(ConfDetails, errConfDetails)
+	Snowprint, errSnowprint = snowprintx.CreateSnowprint(
+		ConfDetails.ServiceName,
+	)
+
+	ConfDetails, errConfDetails = parseConfigDetails(configDetailsPath)
+	Credentials, errCredentials = parseCredentialDetails(credentialsDetailsPath)
 )
 
 func readFile(path string) (*[]byte, error) {
@@ -77,69 +67,6 @@ func parseConfigDetails(path string) (*RegistryDetails, error) {
 	errDetails := json.Unmarshal(*detailsJSON, &details)
 
 	return &details, errDetails
-}
-
-func buildAvailableRolesFromDetails(
-	details *RegistryDetails,
-	err error,
-) (
-	AvailableServiceMap,
-	error,
-) {
-	if err != nil {
-		return nil, err
-	}
-	if details == nil {
-		return nil, errors.New("details should not be nil")
-	}
-
-	services := AvailableServiceMap{}
-	for serviceIndex, service := range details.AvailableRoles {
-		services[service] = serviceIndex
-	}
-
-	return services, nil
-}
-
-func parseSkeletonKeys(path string) (
-	SaltedKeyMap,
-	SkeletonKeyRoleMap,
-	error,
-) {
-	skeletonKeysJSON, errSkeletonKeysJSON := readFile(path)
-	if errSkeletonKeysJSON != nil {
-		return nil, nil, errSkeletonKeysJSON
-	}
-
-	var skeletonKeys SkeletonKeyMap
-	errSkeletonKeys := json.Unmarshal(*skeletonKeysJSON, &skeletonKeys)
-	if errSkeletonKeys != nil {
-		return nil, nil, errSkeletonKeys
-	}
-
-	saltedSkeletonKeys := SaltedKeyMap{}
-	SkeletonKeyRoles := SkeletonKeyRoleMap{}
-
-	for username, details := range skeletonKeys {
-		saltedPassword, errSaltedPassword := passwordx.HashPassword(
-			details.Password,
-			&passwordx.DefaultHashParams,
-		)
-
-		if errSaltedPassword != nil {
-			continue
-		}
-
-		roles := map[string]int{}
-		for roleIndex, role := range details.Roles {
-			roles[role] = roleIndex
-		}
-
-		saltedSkeletonKeys[username] = *saltedPassword
-		SkeletonKeyRoles[username] = roles
-	}
-
-	return saltedSkeletonKeys, SkeletonKeyRoles, errSkeletonKeys
 }
 
 func parseCredentialDetails(path string) (*person.PersonCredentialDetails, error) {

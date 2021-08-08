@@ -1,11 +1,11 @@
-package sessions
+package sessionsx
 
 import (
 	"fmt"
 	"testing"
 
 	"webapi/details"
-	"webapi/jwtx"
+	jwtx "github.com/herebythere/jwtx/v0.1/golang"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 	tmk3 = "tmk3"
 )
 
-func TestWriteJWTToCache(t *testing.T) {
+func TestCreateSession(t *testing.T) {
 	jwtxParams := jwtx.CreateJWTParams{
 		Aud: []string{testRegistryHost},
 		Iss: tmk3,

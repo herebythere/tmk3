@@ -1,33 +1,32 @@
 {
   "service_name": "registry",
-  "config": {
-    "filepath": "/usr/local/config/config.json",
-    "filepath_test": "/usr/local/config/config.json.example"
-  },
-  "skeleton_keys": {
-    "filepath": "/usr/local/config/skeleton_keys.json",
-    "filepath_test": "/usr/local/config/skeleton_keys.json.example"
-  },
-  "credentials": {
-    "filepath": "/usr/local/config/credentials.json",
-    "filepath_test": "/usr/local/config/credentials.json.example"
-  },
-  "server": {
-    "https_port": 5000,
-    "idle_timeout": 5,
-    "read_timeout": 5,
-    "write_timeout": 10
+  "available_services": {
+    "filepath": "/usr/local/config/available_services.json",
+    "filepath_test": "/usr/local/config/available_services.json.example"
   },
   "cert_paths": {
     "cert": "/usr/local/config/fullchain.pem",
     "private_key": "/usr/local/config/privkey.pem"
   },
-  "cache_address": "http://10.88.0.1:5010",
-  "available_roles": [
-    "db_host",
-    "cache_host",
-    "media_host",
-    "logs_host",
-    "registry_host"
-  ]
+  "config": {
+    "filepath": "/usr/local/config/config.json",
+    "filepath_test": "/usr/local/config/config.json.example"
+  },
+  "credentials": {
+    "filepath": "/usr/local/config/credentials.json",
+    "filepath_test": "/usr/local/config/credentials.json.example"
+  },
+  "skeleton_keys": {
+    "filepath": "/usr/local/config/skeleton_keys.json",
+    "filepath_test": "/usr/local/config/skeleton_keys.json.example"
+  },
+  "server": {
+    "local_cache_address": "http://10.88.0.1:5000",
+    "https_port": 5000,
+    "idle_timeout": 5,
+    "rate_limit": 10,
+    "read_timeout": 5,
+    "session_cookie_label": "superawesomesite_dot_com__registry",
+    "write_timeout": 10
+  }
 }

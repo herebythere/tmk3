@@ -1,0 +1,39 @@
+## REDUCED
+compatibility_level = 3.6
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+unknown_local_recipient_reject_code = 550
+debug_peer_level = 2
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $$daemon_directory/$$process_name $$process_id & sleep 5
+sendmail_path = /usr/sbin/sendmail
+newaliases_path = /usr/bin/newaliases
+mailq_path = /usr/bin/mailq
+setgid_group = postdrophtml_directory = nomanpage_directory = /usr/share/mansample_directory = /etc/postfixreadme_directory = /usr/share/doc/postfix/readme
+inet_protocols = ipv4
+meta_directory = /etc/postfix
+shlib_directory = /usr/lib/postfix
+
+## ADDED
+myhostname = ${domain_tld}
+mydomain = ${domain_tld}
+myorigin = ${domain_tld}
+# don't recieve declared below, important
+mydestination =
+mynetworks_style = subnet
+relayhost =
+inet_interfaces = loopback-only
+mailbox_size_limit = 0
+
+smtpd_tls_cert_file=${cert_filepath}
+smtpd_tls_key_file=${private_key_filepath}
+smtp_use_tls=yes
+smtp_tls_security_level = encrypt
+smtpd_tls_security_level = encrypt
+smtp_tls_note_starttls_offer = yes
+smtpd_tls_loglevel = 1
+smtpd_tls_received_header = yes

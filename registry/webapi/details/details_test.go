@@ -10,8 +10,8 @@ var (
 	exampleSkeletonKeysPath = os.Getenv("SKELETON_KEYS_FILEPATH_TEST")
 	exampleCredentialsPath  = os.Getenv("CREDENTIALS_FILEPATH_TEST")
 
-	testSaltedUsers, testUserRoles, errTestSkeletonDetails = parseSkeletonKeys(exampleSkeletonKeysPath)
-	testSkeletonKeysJSON, errTestSkeletonKeysJSON          = readFile(exampleSkeletonKeysPath)
+	// testSaltedUsers, testUserRoles, errTestSkeletonDetails = parseSkeletonKeys(exampleSkeletonKeysPath)
+	// testSkeletonKeysJSON, errTestSkeletonKeysJSON          = readFile(exampleSkeletonKeysPath)
 )
 
 func TestReadFile(t *testing.T) {
@@ -53,39 +53,39 @@ func TestParseCredentialDetails(t *testing.T) {
 	}
 }
 
-func TestParseSkeletonKeys(t *testing.T) {
-	testSaltedUsers, testUserRoles, errTestSkeletonDetails := parseSkeletonKeys(exampleSkeletonKeysPath)
+// func TestParseSkeletonKeys(t *testing.T) {
+// 	testSaltedUsers, testUserRoles, errTestSkeletonDetails := parseSkeletonKeys(exampleSkeletonKeysPath)
 
-	if testSaltedUsers == nil {
-		t.Fail()
-		t.Logf("There should be salted users that can be parsed")
-	}
+// 	if testSaltedUsers == nil {
+// 		t.Fail()
+// 		t.Logf("There should be salted users that can be parsed")
+// 	}
 
-	if testUserRoles == nil {
-		t.Fail()
-		t.Logf("There should be user roles that can be parsed")
-	}
+// 	if testUserRoles == nil {
+// 		t.Fail()
+// 		t.Logf("There should be user roles that can be parsed")
+// 	}
 
-	if errTestSkeletonDetails != nil {
-		t.Fail()
-		t.Logf(errTestSkeletonDetails.Error())
-	}
-}
+// 	if errTestSkeletonDetails != nil {
+// 		t.Fail()
+// 		t.Logf(errTestSkeletonDetails.Error())
+// 	}
+// }
 
-func TestBuildAvailableRolesFromDetails(t *testing.T) {
-	exampleDetails, errExampleDetails := parseConfigDetails(exampleDetailsPath)
-	services, errServices := buildAvailableRolesFromDetails(
-		exampleDetails,
-		errExampleDetails,
-	)
+// func TestBuildAvailableServicesFromDetails(t *testing.T) {
+// 	exampleDetails, errExampleDetails := parseConfigDetails(exampleDetailsPath)
+// 	services, errServices := buildAvailableServicesFromDetails(
+// 		exampleDetails,
+// 		errExampleDetails,
+// 	)
 
-	if errServices != nil {
-		t.Fail()
-		t.Logf(errServices.Error())
-	}
+// 	if errServices != nil {
+// 		t.Fail()
+// 		t.Logf(errServices.Error())
+// 	}
 
-	if services == nil {
-		t.Fail()
-		t.Logf("There should be services that can be parsed")
-	}
-}
+// 	if services == nil {
+// 		t.Fail()
+// 		t.Logf("There should be services that can be parsed")
+// 	}
+// }

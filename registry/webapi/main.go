@@ -17,16 +17,18 @@ var (
 
 func main() {
 	// verify user
-	// quite otherwise
+	//   ->
+	//
+	//
 
 	proxyMux := mux.CreateMux()
 
-	err := http.ListenAndServeTLS(
+	errServer := http.ListenAndServeTLS(
 		httpsPort,
 		certFilepath,
 		keyFilepath,
 		proxyMux,
 	)
 
-	log.Fatal(err)
+	log.Fatal(errServer)
 }

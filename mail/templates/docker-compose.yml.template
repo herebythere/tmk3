@@ -1,17 +1,14 @@
-# brian taylor vann
-# taylorvann dot com
-
 version: "3"
 services:
   webapi:
-    container_name: ${service_name}_${https_port}
+    container_name: ${service_name}_${http_port}
     build:
       context: ./webapi/
       dockerfile: dockerfile
     restart: always
     ports:
-      - "${http_port}:80"
-      - "${https_port}:443"
+      - "${http_port}:${http_port}"
+      - "${mx_port}:587"
     volumes:
       - ./config/:/usr/local/config/
       - ./webapi/:/usr/lib/go/src/webapi/
