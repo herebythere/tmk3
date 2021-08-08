@@ -19,15 +19,15 @@ const (
 	contentType     = "Content-Type"
 	applicationJson = "application/json"
 	execRoute       = "/"
-	post = "POST"
-	failedToExec = "failed to exec command"
+	post            = "POST"
+	failedToExec    = "failed to exec command"
 
-	PrintRoute      		= "/ping"
-	GetGuestSessionRoute	= "/get_guest_server_session"
-	RegisterServerRoute		= "/get_server_session"
-	ValidateServerRoute		= "/validate_server_session"
-	UpdateServiceDetails	= "/update_server_details"
-	RequestServiceDetails	= "/request_service_details"
+	PrintRoute            = "/ping"
+	GetGuestSessionRoute  = "/get_guest_server_session"
+	RegisterServerRoute   = "/get_server_session"
+	ValidateServerRoute   = "/validate_server_session"
+	UpdateServiceDetails  = "/update_server_details"
+	RequestServiceDetails = "/request_service_details"
 )
 
 var (

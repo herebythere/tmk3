@@ -12,7 +12,6 @@ type PersonIdentity struct {
 	Password string `json:"password"`
 }
 
-
 // type PersonCredentialDetails struct {
 // 	Kind     string `json:"kind"`
 // 	Username string `json:"username"`

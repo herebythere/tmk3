@@ -16,7 +16,7 @@ type ConfigDetails struct {
 
 type ServerDetails struct {
 	HTTPPort     int `json:"http_port"`
-	MXPort		 int `json:"mx_port"`
+	MXPort       int `json:"mx_port"`
 	IdleTimeout  int `json:"idle_timeout"`
 	ReadTimeout  int `json:"read_timeout"`
 	WriteTimeout int `json:"write_timeout"`
@@ -28,15 +28,15 @@ type CertsDetails struct {
 }
 
 type MailDetails struct {
-	ServiceName string            `json:"service_name"`
-	TLD			string            `json:"tld"`
-	Config      ConfigDetails     `json:"config"`
-	Certs	    CertsDetails	  `json:"certs"`
-	Server      ServerDetails     `json:"server"`
+	ServiceName string        `json:"service_name"`
+	TLD         string        `json:"tld"`
+	Config      ConfigDetails `json:"config"`
+	Certs       CertsDetails  `json:"certs"`
+	Server      ServerDetails `json:"server"`
 }
 
 var (
-	detailsPath = os.Getenv("CONFIG_FILEPATH")
+	detailsPath         = os.Getenv("CONFIG_FILEPATH")
 	Details, DetailsErr = ReadDetailsFromFile(detailsPath)
 )
 

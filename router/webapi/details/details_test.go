@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	exampleDetailsPath	= os.Getenv("CONFIG_FILEPATH_TEST")
+	exampleDetailsPath = os.Getenv("CONFIG_FILEPATH_TEST")
 )
 
 func TestReadFile(t *testing.T) {

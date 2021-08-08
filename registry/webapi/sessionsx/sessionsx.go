@@ -7,15 +7,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	
+
 	jwtx "github.com/herebythere/jwtx/v0.1/golang"
 )
 
 const (
-	applicationJson = "application/json"
-	set = "SET"
+	applicationJson      = "application/json"
+	set                  = "SET"
 	unableToWriteToCache = "unable to write jwt to cache"
-
 )
 
 var (
@@ -23,9 +22,8 @@ var (
 	sessionCookieName = os.Getenv("SESSION_COOKIE_LABEL")
 
 	errSuccessfulWrite = errors.New("nil entry was provided")
-	errNoCookie = errors.New("no session cookie found")
+	errNoCookie        = errors.New("no session cookie found")
 )
-
 
 // create session
 // write session to cache
@@ -38,8 +36,6 @@ var (
 //	 -> issued at is after now or equal to no
 //   -> expiry is not greater than now
 
-
-
 func writeJWTToCache(
 	tokenPayload *jwtx.TokenPayload,
 	err error,
@@ -48,14 +44,14 @@ func writeJWTToCache(
 	error,
 ) {
 	if err != nil {
-        return false, err
-    }
+		return false, err
+	}
 
 	instructions := []interface{}{set, tokenPayload.Signature, tokenPayload}
 	marshaledInstructions, errMarshaledInstructions := json.Marshal(instructions)
 	if errMarshaledInstructions != nil {
-        return false, errMarshaledInstructions
-    }
+		return false, errMarshaledInstructions
+	}
 
 	requestReader := bytes.NewReader(marshaledInstructions)
 
@@ -76,7 +72,7 @@ func writeJWTToCache(
 }
 
 func readJWTFromCache(signature string, err error) {
-	
+
 }
 
 func CreateSession(
@@ -105,7 +101,7 @@ func CreateSession(
 	// if successfulWrite {
 	// 	return tokenPayload, nil
 	// }
-	
+
 	// return nil, errSuccessfulWrite
 }
 
@@ -142,9 +138,9 @@ func GetSessionCookie(r *http.Request, err error) (*jwtx.TokenDetails, error) {
 	// check if not before
 
 	// check iss at
-	    // -> if issued before now, bail
+	// -> if issued before now, bail
 	// check expiry
-	    // -> if expiry is below now, bail with invalid request	
+	// -> if expiry is below now, bail with invalid request
 }
 
 // // hello hello
@@ -174,4 +170,3 @@ func GetSessionCookie(r *http.Request, err error) (*jwtx.TokenDetails, error) {
 // 	// store it in the redis cache
 // 	return nil, nil
 // }
-

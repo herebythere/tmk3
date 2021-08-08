@@ -19,8 +19,8 @@ const (
 	expectedAddress    = "https://127.0.0.1:5000"
 )
 
-var	(
-	exampleDetailsPath	= os.Getenv("CONFIG_FILEPATH_TEST")
+var (
+	exampleDetailsPath = os.Getenv("CONFIG_FILEPATH_TEST")
 )
 
 func TestRedactURL(t *testing.T) {

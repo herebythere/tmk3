@@ -35,11 +35,10 @@ type GatewayDetails struct {
 	Server      ServerDetails     `json:"server"`
 }
 
-const (
-)
+const ()
 
 var (
-	detailsPath = os.Getenv("CONFIG_FILEPATH")
+	detailsPath         = os.Getenv("CONFIG_FILEPATH")
 	Details, DetailsErr = ReadDetailsFromFile(detailsPath)
 )
 

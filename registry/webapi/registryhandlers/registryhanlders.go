@@ -6,7 +6,6 @@ import (
 	"webapi/responses"
 )
 
-
 func Ping(w http.ResponseWriter, r *http.Request) {
 	// rate limit
 	//
@@ -34,7 +33,7 @@ func RegisterServer(w http.ResponseWriter, r *http.Request) {
 	// service name
 	// self-declared uuid
 	// service kind: broadcaster | receiver
-	// 
+	//
 	// assigned a name? db.b.1.tmk3.com db.r.0.tmk3.com
 }
 
@@ -54,17 +53,9 @@ func RequestServiceDetails() {
 	//	 -> infre ip from request (forwarded from)
 }
 
-
 // when a new server registers
 
 //	-> returns server session cookie, assigned name
-
-
-
-
-
-
-
 
 // example cache service
 //

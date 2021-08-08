@@ -3,13 +3,13 @@
 package mux
 
 import (
-		"errors"
-		"fmt"
-		"net/http"
-		"net/http/httptest"
-		"encoding/json"
-		"testing"
-		"bytes"
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 const (
@@ -19,10 +19,10 @@ const (
 var (
 	testBody = MailRequestBody{
 		Recipient: "person@example.com",
-		Subject: "this is a test email",
-		Body: "Please disregard this email, it is a test.",
+		Subject:   "this is a test email",
+		Body:      "Please disregard this email, it is a test.",
 	}
-	errTestBody = errors.New("test body error")
+	errTestBody      = errors.New("test body error")
 	expectedResponse = "this is a default test response"
 	expectedSendMail = `echo "Please disregard this email, it is a test." | mailx -s "this is a test email" person@example.com`
 )
@@ -91,8 +91,8 @@ func TestExecMailCommand(t *testing.T) {
 		t.Fail()
 		t.Logf(errResults.Error())
 	}
-	
-	if (results != nil) {
+
+	if results != nil {
 		fmt.Println(*results, errResults)
 	}
 }

@@ -7,15 +7,15 @@ import (
 )
 
 type ErrorEntity struct {
-	Kind	string	`json:"kind"`
-	Message	string	`json:"message"`
+	Kind    string `json:"kind"`
+	Message string `json:"message"`
 }
 type ErrorDeclarations = []ErrorEntity
 
 const (
 	applicationJSON = "application/json"
-	contentType = "Content-Type"
-	failedToExec = "failed to exec"
+	contentType     = "Content-Type"
+	failedToExec    = "failed to exec"
 )
 
 func WriteError(w http.ResponseWriter, kind string, message string) {
