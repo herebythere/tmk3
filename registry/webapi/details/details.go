@@ -32,12 +32,13 @@ type CertPaths struct {
 }
 
 type RegistryDetails struct {
-	CertPaths         CertPaths     `json:"cert_paths"`
 	AvailableServices ConfigDetails `json:"available_services"`
+	CertPaths         CertPaths     `json:"cert_paths"`
 	Config            ConfigDetails `json:"config"`
 	Credentials       ConfigDetails `json:"credentials"`
 	Server            ServerDetails `json:"server"`
 	ServiceName       string        `json:"service_name"`
+	SkeletonKeys	  ConfigDetails `json:"skeleton_keys"`
 }
 
 var (

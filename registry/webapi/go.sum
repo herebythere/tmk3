@@ -1,7 +1,15 @@
 github.com/herebythere/jwtx/v0.1/golang v0.0.0-20210804015553-6fce94ff3a05 h1:BOFgE6+6KScBHfGn0P9RNZYNFAXzzMpgEJAd9Zcu34w=
 github.com/herebythere/jwtx/v0.1/golang v0.0.0-20210804015553-6fce94ff3a05/go.mod h1:dCh4LW29ERecAXszbvssLw0lOSHjA+Xs9uqL3nmuMpE=
+github.com/herebythere/jwtx/v0.1/golang v0.0.0-20210808035205-a03aa9a361c2 h1:GJAfl+8Yhf0Ic9/VbsZ/+jk/arRK+PEPKGRrBOaufYs=
+github.com/herebythere/jwtx/v0.1/golang v0.0.0-20210808035205-a03aa9a361c2/go.mod h1:dCh4LW29ERecAXszbvssLw0lOSHjA+Xs9uqL3nmuMpE=
 github.com/herebythere/passwordx/v0.1/golang v0.0.0-20210804015704-8c202482f424 h1:UFIPT0NWYT5pHjkerXXd0yrxab0tWxo7tT8+W4BMN/8=
 github.com/herebythere/passwordx/v0.1/golang v0.0.0-20210804015704-8c202482f424/go.mod h1:rRqUut6qDB6ai30xj5lJ8jx76n2Nu2Px8UhiJ7m33MY=
+github.com/herebythere/sessionslx v0.0.0-20210808045139-c6a0abaa9efe h1:t5a/75nDGcr5wwD+q4V04XOt5u5e4P4dwtbsddTwvOk=
+github.com/herebythere/sessionslx/v0.1/golang v0.0.0-20210808045139-c6a0abaa9efe h1:VtngbofJxOwy30Ygbkonljk0oBJRnWdy8L7WGGO3K4w=
+github.com/herebythere/sessionslx/v0.1/golang v0.0.0-20210808045139-c6a0abaa9efe/go.mod h1:JMUcXvtis1AiPQOINWbmI1JLXgG+Uk0OCRCRKYaGcCM=
+github.com/herebythere/skeletonkeyslx v0.1.0 h1:QZHAIzsB06Jklk8WHfLFxCaycVrZGZ6bVm+bQg0+7Ek=
+github.com/herebythere/skeletonkeyslx/v0.1/golang v0.0.0-20210808041803-53dd0a2aee39 h1:OurOm/PkEYIpj/T/Hpvw2bGrSzAnpkAZmMGAFHR3kdk=
+github.com/herebythere/skeletonkeyslx/v0.1/golang v0.0.0-20210808041803-53dd0a2aee39/go.mod h1:qmkHqK5YgyqP3UrW/tvP95UXxq9YSM43TvDV/yPOOvE=
 github.com/herebythere/snowprintx/v0.1/golang v0.0.0-20210804021419-a29c02c3a02f h1:DnRC4s0Bn0xbBt+PkJwzsuZt57Rl/kys1Hh0O+UOzZ8=
 github.com/herebythere/snowprintx/v0.1/golang v0.0.0-20210804021419-a29c02c3a02f/go.mod h1:A+TttcNWj6FLAhIaMffa+3kLAjFSsDWJCKWTnEaRMm8=
 golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 h1:/UOmuWzQfxxo9UtlXMwuQU8CMgg1eZXqTRwkSQJWKOI=

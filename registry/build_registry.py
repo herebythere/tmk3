@@ -57,4 +57,4 @@ def build_registry_with_podman():
 if __name__ == "__main__":
     config = get_config("config/config.json")
     create_required_templates(config)
-    # build_registry_with_podman()
+    build_registry_with_podman()

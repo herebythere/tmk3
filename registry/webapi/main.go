@@ -7,28 +7,33 @@ import (
 
 	"webapi/details"
 	"webapi/mux"
+
+	skeletonkeyslx "github.com/herebythere/skeletonkeyslx/v0.1/golang"
 )
 
 var (
-	httpsPort    = fmt.Sprint(":", details.ConfDetails.Server.HTTPSPort)
-	certFilepath = details.ConfDetails.CertPaths.Cert
-	keyFilepath  = details.ConfDetails.CertPaths.PrivateKey
+	httpsPort = fmt.Sprint(":", details.ConfDetails.Server.HTTPSPort)
 )
 
 func main() {
-	// verify user
-	//   ->
-	//
-	//
+	// Setup Skeleton Keys
+	errSkeletonKeys := skeletonkeyslx.SetupSkeletonKeysAndAvailableServices(
+		details.ConfDetails.ServiceName,
+		details.ConfDetails.AvailableServices.Filepath,
+		details.ConfDetails.SkeletonKeys.Filepath,
+	)
+	if errSkeletonKeys != nil {
+		log.Fatal(errSkeletonKeys.Error())
+	}
 
+	// start server
 	proxyMux := mux.CreateMux()
-
 	errServer := http.ListenAndServeTLS(
 		httpsPort,
-		certFilepath,
-		keyFilepath,
+		details.ConfDetails.CertPaths.Cert,
+		details.ConfDetails.CertPaths.PrivateKey,
 		proxyMux,
 	)
 
-	log.Fatal(errServer)
+	log.Fatal(errServer.Error())
 }

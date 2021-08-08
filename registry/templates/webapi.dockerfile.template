@@ -6,6 +6,8 @@ VOLUME [ "/usr/lib/go/src/webapi/", "/usr/local/config/" ]
 
 RUN go get github.com/herebythere/jwtx/v0.1/golang/ \
     github.com/herebythere/passwordx/v0.1/golang/ \
+    github.com/herebythere/sessionslx/v0.1/golang/ \
+    github.com/herebythere/skeletonkeyslx/v0.1/golang/ \
     github.com/herebythere/snowprintx/v0.1/golang/
 
 WORKDIR /usr/lib/go/src/webapi/
